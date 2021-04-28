@@ -5,3 +5,4 @@ Code created in October 2026. This history was split into smaller commits in Oct
 | Simulated date | Actual change |
 | --- | --- |
 | 2021-03-16 | docs: establish disclosed demo and project license (README.md, LICENSE, .gitignore) |
+| 2021-04-28 | build: configure root dependencies (package.json) |
