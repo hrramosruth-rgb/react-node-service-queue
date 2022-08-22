@@ -8,7 +8,7 @@ export function createApp(store) {
   app.use('/api', (_req, res, next) => {res.set('Cache-Control', 'no-store'); next();});
   app.get('/api/health', (_req, res) => res.json({status: 'ok'}));
   app.get('/api/tickets', (_req, res) => res.json(store.list()));
-  app.post('/api/tickets', (req, res) => res.status(201).json(store.enqueue(req.body?.name)));
+  app.post('/api/tickets', (req, res) => res.status(201).json(store.enqueue(req.body?.name, req.get('Idempotency-Key'))));
   app.patch('/api/tickets/:id', (req, res) => res.json(store.transition(req.params.id, req.body?.status)));
   app.use((_req, res) => res.status(404).json({error: 'Route not found.'}));
   app.use((error, _req, res, _next) => {
