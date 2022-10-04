@@ -17,3 +17,4 @@ Code created in October 2026. This history was split into smaller commits in Oct
 | 2022-05-26 | build: configure root dependencies (package.json) |
 | 2022-07-09 | feat: implement and verify store (server/store.js, tests/queue.test.js) |
 | 2022-08-22 | feat: implement and verify app (server/app.js, tests/api.test.js) |
+| 2022-10-04 | ci: verify demo on GitHub Actions (.github/workflows/ci.yml) |
