@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 
 async function api(path, options = {}) {
-  const response = await fetch('/api' + path, {...options, headers: {'Content-Type': 'application/json'}});
+  const response = await fetch('/api' + path, {...options, headers: {'Content-Type': 'application/json', ...options.headers}});
   const data = await response.json();
   if (!response.ok) throw new Error(data.error || 'The queue could not be updated.');
   return data;
@@ -17,6 +17,7 @@ export default function App() {
   const [view, setView] = useState('active');
   const pending = useRef(false);
   const generation = useRef(0);
+  const checkIn = useRef(null);
   const refresh = useCallback(async (signal) => {
     const current = ++generation.current;
     try {
@@ -37,8 +38,13 @@ export default function App() {
     if (pending.current) return;
     pending.current = true; setBusy(true); setError(''); setNotice('');
     try {
-      const ticket = await api(path, {method, body: JSON.stringify(payload)});
-      if (method === 'POST') setName('');
+      const headers = {};
+      if (method === 'POST') {
+        if (checkIn.current?.name !== payload.name) checkIn.current = {name: payload.name, key: crypto.randomUUID()};
+        headers['Idempotency-Key'] = checkIn.current.key;
+      }
+      const ticket = await api(path, {method, body: JSON.stringify(payload), headers});
+      if (method === 'POST') {setName(''); checkIn.current = null;}
       setNotice(message + ' ' + ticket.ticket);
       await refresh();
     } catch (failure) {setError(failure.message || 'Could not connect to the queue.');}
