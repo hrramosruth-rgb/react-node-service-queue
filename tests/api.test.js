@@ -33,3 +33,13 @@ test('rejects malformed JSON without exposing stack traces', async t => {
   assert.deepEqual(Object.keys(response.body), ['error']);
   assert.match(response.body.error, /JSON/i);
 });
+
+test('idempotency keys prevent duplicate tickets when check-in is retried', async t => {
+  const app = appFor(t);
+  const first = await request(app).post('/api/tickets').set('Idempotency-Key', 'check-in-123').send({name: 'Alex'}).expect(201);
+  const retry = await request(app).post('/api/tickets').set('Idempotency-Key', 'check-in-123').send({name: 'Alex'}).expect(201);
+  assert.equal(retry.body.id, first.body.id);
+  await request(app).post('/api/tickets').set('Idempotency-Key', 'check-in-123').send({name: 'Sam'}).expect(409);
+  const list = await request(app).get('/api/tickets').expect(200);
+  assert.equal(list.body.length, 1);
+});
