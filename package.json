@@ -13,12 +13,12 @@
     "node": ">=22.12"
   },
   "dependencies": {
-    "express": "5.1.0",
-    "react": "19.1.1",
-    "react-dom": "19.1.1"
+    "express": "5.2.1",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
   },
   "devDependencies": {
-    "vite": "7.1.5",
+    "vite": "8.3.3",
     "supertest": "7.1.4"
   }
 }

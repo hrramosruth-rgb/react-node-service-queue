@@ -21,3 +21,4 @@ Code created in October 2026. This history was split into smaller commits in Oct
 | 2022-11-17 | feat: add or refine src/App.jsx (src/App.jsx) |
 | 2022-12-31 | style: add responsive styles presentation (src/styles.css) |
 | 2023-02-12 | docs: document setup and simulation limits (README.md) |
+| 2023-03-28 | build: configure root dependencies (package.json, package-lock.json) |
