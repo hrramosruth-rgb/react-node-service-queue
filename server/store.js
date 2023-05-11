@@ -54,7 +54,7 @@ export class QueueStore {
     const state = structuredClone(this.#state);
     const entry = state.entries.find(item => item.id === id);
     if (!entry) throw new QueueError(404, 'Ticket not found.');
-    if (!Object.hasOwn(transitions, status)) throw new QueueError(400, 'Unknown queue status.');
+    if (typeof status !== 'string' || !Object.hasOwn(transitions, status)) throw new QueueError(400, 'Unknown queue status.');
     if (status === entry.status) return structuredClone(entry);
     if (!transitions[entry.status].includes(status)) throw new QueueError(409, 'This transition is not allowed.');
     if (status === 'serving' && state.entries.some(item => item.status === 'serving')) {
