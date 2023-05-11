@@ -75,3 +75,12 @@ test('failed disk writes do not change memory or consume a ticket number', t => 
   rmSync(file, {recursive: true});
   assert.equal(store.enqueue('Alex').ticket, 'Q001');
 });
+
+test('malformed status values return a validation error without changing state', t => {
+  const {store} = fixture(t);
+  const ticket = store.enqueue('Alex');
+  for (const value of [{toString: null}, [], ['serving'], null, undefined, 42]) {
+    assert.throws(() => store.transition(ticket.id, value), error => error.status === 400);
+    assert.equal(store.list()[0].status, 'waiting');
+  }
+});
